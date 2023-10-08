@@ -21,7 +21,8 @@ jobs:
         run: |
           git config --global user.name "Intercreate"
           git config --global user.email ic@n0t4d0m41n.1337
-          git fetch --force --tags
 
       - name: Configure & run tests
-        run: cmake -B tests/build -S tests --log-level=NOTICE
+        run: |
+          git fetch --force --tags
+          cmake -B tests/build -S tests --log-level=NOTICE
