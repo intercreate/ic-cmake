@@ -17,10 +17,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Setup git user
+      - name: Setup GIT
         run: |
           git config --global user.name "Intercreate"
           git config --global user.email ic@n0t4d0m41n.1337
+          git tag 0.0.0
 
       - name: Configure & run tests
         run: cmake -B tests/build -S tests --log-level=NOTICE
