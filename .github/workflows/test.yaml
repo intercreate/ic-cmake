@@ -1,0 +1,21 @@
+# Copyright (c) 2023 Intercreate, Inc.
+# SPDX-License-Identifier: Apache-2.0
+#
+# Authors: J.P. Hutchins <jp@intercreate.io>
+
+name: Test
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Configure & run tests
+        run: cmake -B tests/build -S tests --log-level=NOTICE
