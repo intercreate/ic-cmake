@@ -106,7 +106,7 @@ function(ic_project
     if(res AND NOT res EQUAL 0)
         message(
             WARNING
-            "The ${git_tag} should be set by git tag but there is no tag"
+            "The ${out_fw_version} should be set by git tag but there is no tag"
         )
         set(has_git_tag 0)
     else()
