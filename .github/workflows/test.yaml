@@ -23,5 +23,5 @@ jobs:
           git config --global user.email ic@n0t4d0m41n.1337
           git fetch --prune --unshallow --tags
 
-      - name: Configure & run tests
-        run: cmake -B tests/build -S tests --log-level=NOTICE
+      - name: Run the test script
+        run: cmake -P tests/script.cmake

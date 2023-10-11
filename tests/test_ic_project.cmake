@@ -3,6 +3,8 @@
 #
 # Authors: J.P. Hutchins <jp@intercreate.io>
 
+include(${CMAKE_CURRENT_SOURCE_DIR}/../ic.cmake)
+
 test_cmake_group_begin("ic_project() with required args")
 
 # test ic_project() with only required args
@@ -31,7 +33,7 @@ endforeach()
 assert(Flumbr STREQUAL ${IC_CLIENT_NAME})
 assert("Dipple Snurp 3" STREQUAL ${IC_PROJECT_NAME})
 assert(FF3 STREQUAL ${IC_BOARD_NAME})
-assert(${IC_CONFIG_STRING} MATCHES Flumbr_Dipple_Snurp_3_FF3_.+_[0-9]+)
+assert(${IC_FULL_NAME} MATCHES Flumbr_Dipple_Snurp_3_FF3_.+_[0-9]+)
 
 test_cmake_group_end()
 
@@ -64,6 +66,6 @@ assert(toffee STREQUAL ${IC_BOARD_NAME})
 assert(NFF2 STREQUAL ${IC_BOARD_REV})
 assert(proto STREQUAL ${IC_BUILD_TYPE})
 assert(Flampr STREQUAL ${IC_CLIENT_NAME})
-assert(${IC_CONFIG_STRING} MATCHES Flampr_flying-vanilla-bean_toffee@NFF2_.+_[0-9]+_proto)
+assert(${IC_FULL_NAME} MATCHES Flampr_flying-vanilla-bean_toffee@NFF2_.+_[0-9]+_proto)
 
 test_cmake_group_end()

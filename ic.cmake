@@ -5,5 +5,8 @@
 
 include_guard(GLOBAL)
 
+include(${CMAKE_CURRENT_LIST_DIR}/dependencies/fetch_test_cmake.cmake)
+
+include(${CMAKE_CURRENT_LIST_DIR}/src/ic_bundle.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/src/ic_project.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/src/ic_utils.cmake)

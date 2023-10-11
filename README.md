@@ -3,7 +3,7 @@
 # Tests
 
 ```
-cmake -B tests/build -S tests --log-level=NOTICE
+cmake -P tests/script.cmake
 ```
 
 # Contributions

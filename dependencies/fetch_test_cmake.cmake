@@ -3,6 +3,8 @@
 #
 # Authors: J.P. Hutchins <jp@intercreate.io>
 
+include_guard(GLOBAL)
+
 include(FetchContent)
 
 FetchContent_Declare(test_cmake

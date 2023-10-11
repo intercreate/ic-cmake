@@ -52,7 +52,7 @@ function(ic_project
     out_c_compiler_version
     out_host_system_name
     out_host_system_version
-    out_config_string
+    out_full_name
 )
     set(required_keyword_args
         CLIENT_NAME
@@ -198,7 +198,7 @@ function(ic_project
         ${_CLIENT_NAME}_${CMAKE_PROJECT_NAME}_${_BOARD_NAME}${board_rev_string}_${git_tag}_${build_date}${build_type_string}
     )
     string(REPLACE " " "_" config_string ${config_string})
-    set_definition("${out_config_string}" ${config_string} PARENT_SCOPE)
+    set_definition("${out_full_name}" ${config_string} PARENT_SCOPE)
 
 endfunction()
 
@@ -236,7 +236,7 @@ function(ic_project_out out_variable_name)
         IC_C_COMPILER_VERSION
         IC_HOST_SYSTEM_NAME
         IC_HOST_SYSTEM_VERSION
-        IC_CONFIG_STRING
+        IC_FULL_NAME
     )
     set(${out_variable_name} ${_IC_OUT_VARIABLES} PARENT_SCOPE)
 endfunction()

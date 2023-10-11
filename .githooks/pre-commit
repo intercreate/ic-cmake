@@ -8,4 +8,4 @@
 set -eo pipefail
 
 # Configure and run the tests
-cmake -B tests/.build-githook -S tests --log-level=NOTICE
+cmake -P tests/script.cmake
