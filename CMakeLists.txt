@@ -14,7 +14,6 @@ if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
     set(package_files 
         ic.cmake
         LICENSE
-        dependencies/fetch_test_cmake.cmake
         src/ic_bundle.cmake
         src/ic_project.cmake
         src/ic_utils.cmake

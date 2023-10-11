@@ -37,7 +37,9 @@ macro(set_definition name value)
             FATAL_ERROR
             "Invalid arguments to set_definition(<name> <value> [PARENT_SCOPE]): (${name} ${value} ${ARGN})"
         )
-    elseif(DEFINED name)
+    endif()
+
+    if(DEFINED name)
         message(FATAL_ERROR "${name} is already defined!")
     endif()
 

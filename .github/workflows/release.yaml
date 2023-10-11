@@ -30,7 +30,7 @@ jobs:
           file: build/ic_cmake.zip
           tag: ${{ github.ref }}
 
-      - name: Add fetch_test_cmake.cmake to release
+      - name: Add fetch_ic_cmake.cmake to release
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
