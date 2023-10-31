@@ -98,7 +98,7 @@ function(ic_project
 
     # Warn about git tag
     execute_process(
-        COMMAND git describe
+        COMMAND git describe --tags
         RESULT_VARIABLE res
         ERROR_QUIET
         OUTPUT_QUIET
@@ -115,7 +115,7 @@ function(ic_project
 
     # Set firmware version
     execute_process(
-        COMMAND git describe --dirty=+ --always --abbrev=7
+        COMMAND git describe --tags --dirty=+ --always --abbrev=7
         OUTPUT_VARIABLE git_tag
         OUTPUT_STRIP_TRAILING_WHITESPACE
     )
