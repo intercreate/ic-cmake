@@ -1,5 +1,18 @@
 # Intercreate CMake
 
+This CMake library adds convenience functions to the build system.
+
+# Include in Your Project
+
+1. Add the fetch file to your repo: 
+  ```
+  wget https://github.com/intercreate/ic-cmake/releases/latest/download/fetch_ic.cmake
+  ```
+2. Include and link in your CMakeLists.txt:
+  ```cmake
+  include(fetch_ic.cmake)
+  ```
+
 # Tests
 
 ```
