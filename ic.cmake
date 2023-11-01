@@ -6,6 +6,7 @@
 include_guard(GLOBAL)
 
 include(${CMAKE_CURRENT_LIST_DIR}/src/ic_bundle.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/src/ic_c_flags.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/src/ic_c_warnings.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/src/ic_project.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/src/ic_set_cmake_options.cmake)
