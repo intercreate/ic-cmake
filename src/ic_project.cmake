@@ -62,6 +62,7 @@ function(ic_project
     set(optional_keyword_args
         BOARD_REV
         BUILD_TYPE
+        FW_VERSION
     )
     list(APPEND keyword_args
         ${required_keyword_args}
@@ -95,6 +96,8 @@ function(ic_project
 
     set_definition("${out_board_name}" "${_BOARD_NAME}" PARENT_SCOPE)
     if_set_definition("${out_board_rev}" "${_BOARD_REV}" PARENT_SCOPE)
+    if_set_definition("${out_fw_version}" "${_FW_VERSION}" PARENT_SCOPE)
+    if_set_definition("${out_build_type}" "${_BUILD_TYPE}" PARENT_SCOPE)
 
     # Warn about git tag
     execute_process(
@@ -104,27 +107,40 @@ function(ic_project
         OUTPUT_QUIET
     )
     if(res AND NOT res EQUAL 0)
-        message(
-            WARNING
-            "The ${out_fw_version} should be set by git tag but there is no tag"
-        )
+        if(NOT DEFINED ${out_fw_version})
+            message(
+                WARNING
+                "The ${out_fw_version} should be set by git tag but there is no tag"
+            )
+        endif()
         set(has_git_tag 0)
     else()
         set(has_git_tag 1)
+        execute_process(
+            COMMAND git describe --tags --dirty=+ --always --abbrev=7
+            OUTPUT_VARIABLE git_tag
+            OUTPUT_STRIP_TRAILING_WHITESPACE
+        )
     endif()
 
-    # Set firmware version
+    # Set short git commit hash
     execute_process(
-        COMMAND git describe --tags --dirty=+ --always --abbrev=7
-        OUTPUT_VARIABLE git_tag
+        COMMAND git describe --dirty=+ --always --abbrev=7 --exclude *
+        OUTPUT_VARIABLE git_hash
         OUTPUT_STRIP_TRAILING_WHITESPACE
     )
-    set_definition("${out_fw_version}" ${git_tag} PARENT_SCOPE)
+    set_definition("${out_git_hash}" ${git_hash} PARENT_SCOPE)
 
-    if_set_definition("${out_build_type}" "${_BUILD_TYPE}" PARENT_SCOPE)
+    if(NOT DEFINED ${out_fw_version})
+        if(${has_git_tag})
+            set_definition("${out_fw_version}" ${git_tag} PARENT_SCOPE)
+        else()
+            set_definition("${out_fw_version}" ${git_hash} PARENT_SCOPE)
+        endif()
+    endif()
 
     # Set git dirty commit
-    string(FIND ${git_tag} + res)
+    string(FIND ${git_hash} + res)
     if(res EQUAL -1)
         set_definition("${out_git_dirty}" 0 PARENT_SCOPE)
     else()
@@ -149,14 +165,6 @@ function(ic_project
         set_definition("${out_git_tag}" "" PARENT_SCOPE)
         set_definition("${out_git_tag_rev}" "" PARENT_SCOPE)
     endif()
-
-    # Set short git commit hash
-    execute_process(
-        COMMAND git describe --dirty=+ --always --abbrev=7 --exclude *
-        OUTPUT_VARIABLE git_hash
-        OUTPUT_STRIP_TRAILING_WHITESPACE
-    )
-    set_definition("${out_git_hash}" ${git_hash} PARENT_SCOPE)
 
     string(TIMESTAMP build_date "%Y%m%d")
     set_definition("${out_build_date}" ${build_date} PARENT_SCOPE)

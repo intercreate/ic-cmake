@@ -35,6 +35,10 @@ assert("Dipple Snurp 3" STREQUAL ${IC_PROJECT_NAME})
 assert(FF3 STREQUAL ${IC_BOARD_NAME})
 assert(${IC_FULL_NAME} MATCHES Flumbr_Dipple_Snurp_3_FF3_.+_[0-9]+)
 
+foreach(ic_out_var ${ic_out})
+    unset("${ic_out_var}")
+endforeach()
+
 test_cmake_group_end()
 
 test_cmake_group_begin("ic_project() with optional args")
@@ -67,5 +71,31 @@ assert(NFF2 STREQUAL ${IC_BOARD_REV})
 assert(proto STREQUAL ${IC_BUILD_TYPE})
 assert(Flampr STREQUAL ${IC_CLIENT_NAME})
 assert(${IC_FULL_NAME} MATCHES Flampr_flying-vanilla-bean_toffee@NFF2_.+_[0-9]+_proto)
+
+foreach(ic_out_var ${ic_out})
+    unset("${ic_out_var}")
+endforeach()
+
+test_cmake_group_end()
+
+test_cmake_group_begin("ic_project() with FW_VERSION arg")
+
+ic_project_out(ic_out)
+ic_project(
+    # output variables
+    ${ic_out}
+
+    # keyword arguments
+    CLIENT_NAME "Flumbr"
+    PROJECT_NAME "Dipple Snurp 3"
+    BOARD_NAME FF3
+    FW_VERSION 1.0.0
+)
+
+assert(1.0.0 STREQUAL ${IC_FW_VERSION})
+
+foreach(ic_out_var ${ic_out})
+    unset("${ic_out_var}")
+endforeach()
 
 test_cmake_group_end()

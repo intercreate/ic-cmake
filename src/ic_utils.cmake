@@ -44,6 +44,7 @@ macro(set_definition name value)
     endif()
 
     set(${name} ${value} ${ARGN})
+    set(${name} ${value})
     add_compile_definitions(${name}=${value})
     message(STATUS "${name} = ${value}")
 endmacro()
