@@ -15,7 +15,10 @@ if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
         ic.cmake
         LICENSE
         src/ic_bundle.cmake
+        src/ic_c_flags.cmake
+        src/ic_c_warnings.cmake
         src/ic_project.cmake
+        src/ic_set_cmake_options.cmake
         src/ic_utils.cmake
     )
     add_custom_command(
