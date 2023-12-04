@@ -87,13 +87,7 @@ function(ic_project
     endforeach()
 
     set_definition("${out_client_name}" ${_CLIENT_NAME} PARENT_SCOPE)
-
-    project(${_PROJECT_NAME})
-    if(NOT ${_PROJECT_NAME} STREQUAL ${CMAKE_PROJECT_NAME})
-        message(FATAL_ERROR "${_PROJECT_NAME} != ${CMAKE_PROJECT_NAME}")
-    endif()
-    set_definition("${out_project_name}" ${CMAKE_PROJECT_NAME} PARENT_SCOPE)
-
+    set_definition("${out_project_name}" ${_PROJECT_NAME} PARENT_SCOPE)
     set_definition("${out_board_name}" "${_BOARD_NAME}" PARENT_SCOPE)
     if_set_definition("${out_board_rev}" "${_BOARD_REV}" PARENT_SCOPE)
     if_set_definition("${out_fw_version}" "${_FW_VERSION}" PARENT_SCOPE)
@@ -203,7 +197,7 @@ function(ic_project
     # Set the config string for use in naming files, docs, etc.
     set(
         config_string
-        ${_CLIENT_NAME}_${CMAKE_PROJECT_NAME}_${_BOARD_NAME}${board_rev_string}_${git_tag}_${build_date}${build_type_string}
+        "${_CLIENT_NAME}_${_PROJECT_NAME}_${_BOARD_NAME}${board_rev_string}_${${out_fw_version}}_${git_hash}_${build_date}${build_type_string}"
     )
     string(REPLACE " " "_" config_string ${config_string})
     set_definition("${out_full_name}" ${config_string} PARENT_SCOPE)

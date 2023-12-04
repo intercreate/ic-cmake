@@ -33,7 +33,7 @@ endforeach()
 assert(Flumbr STREQUAL ${IC_CLIENT_NAME})
 assert("Dipple Snurp 3" STREQUAL ${IC_PROJECT_NAME})
 assert(FF3 STREQUAL ${IC_BOARD_NAME})
-assert(${IC_FULL_NAME} MATCHES Flumbr_Dipple_Snurp_3_FF3_.+_[0-9]+)
+assert(${IC_FULL_NAME} MATCHES "Flumbr_Dipple_Snurp_3_FF3_.+\\+?_[0-9a-fA-F]+\\+?_[0-9]+")
 
 foreach(ic_out_var ${ic_out})
     unset("${ic_out_var}")
@@ -70,7 +70,11 @@ assert(toffee STREQUAL ${IC_BOARD_NAME})
 assert(NFF2 STREQUAL ${IC_BOARD_REV})
 assert(proto STREQUAL ${IC_BUILD_TYPE})
 assert(Flampr STREQUAL ${IC_CLIENT_NAME})
-assert(${IC_FULL_NAME} MATCHES Flampr_flying-vanilla-bean_toffee@NFF2_.+_[0-9]+_proto)
+assert(
+    ${IC_FULL_NAME} 
+    MATCHES 
+    "Flampr_flying-vanilla-bean_toffee@NFF2_.+\\+?_[0-9a-fA-F]+\\+?_[0-9]+_proto"
+)
 
 foreach(ic_out_var ${ic_out})
     unset("${ic_out_var}")
@@ -93,6 +97,11 @@ ic_project(
 )
 
 assert(1.0.0 STREQUAL ${IC_FW_VERSION})
+assert(
+    ${IC_FULL_NAME} 
+    MATCHES 
+    "Flumbr_Dipple_Snurp_3_FF3_1\.0\.0\\+?_[0-9a-fA-F]+\\+?_[0-9]+"
+)
 
 foreach(ic_out_var ${ic_out})
     unset("${ic_out_var}")
