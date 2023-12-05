@@ -111,7 +111,7 @@ function(ic_project
     else()
         set(has_git_tag 1)
         execute_process(
-            COMMAND git describe --tags --dirty=+ --always --abbrev=7
+            COMMAND git describe --tags --always --abbrev=7
             OUTPUT_VARIABLE git_tag
             OUTPUT_STRIP_TRAILING_WHITESPACE
         )
@@ -124,14 +124,6 @@ function(ic_project
         OUTPUT_STRIP_TRAILING_WHITESPACE
     )
     set_definition("${out_git_hash}" ${git_hash} PARENT_SCOPE)
-
-    if(NOT DEFINED ${out_fw_version})
-        if(${has_git_tag})
-            set_definition("${out_fw_version}" ${git_tag} PARENT_SCOPE)
-        else()
-            set_definition("${out_fw_version}" ${git_hash} PARENT_SCOPE)
-        endif()
-    endif()
 
     # Set git dirty commit
     string(FIND ${git_hash} + res)
@@ -158,6 +150,18 @@ function(ic_project
     else()
         set_definition("${out_git_tag}" "" PARENT_SCOPE)
         set_definition("${out_git_tag_rev}" "" PARENT_SCOPE)
+    endif()
+
+    if(NOT DEFINED ${out_fw_version})
+        if(${has_git_tag})
+            if(NOT "${git_tag_rev}" STREQUAL "")
+                set_definition("${out_fw_version}" "${git_label}-${git_tag_rev}" PARENT_SCOPE)
+            else()
+                set_definition("${out_fw_version}" "${git_label}" PARENT_SCOPE)
+            endif()
+        else()
+            set_definition("${out_fw_version}" ${git_hash} PARENT_SCOPE)
+        endif()
     endif()
 
     string(TIMESTAMP build_date "%Y%m%d")
