@@ -26,16 +26,16 @@ set() the CMake variable and add_compile_definition()
 <value> : the value to set name to
 [PARENT_SCOPE] : call set() with PARENT_SCOPE
 #]]
-macro(set_definition name value)
+macro(set_definition_string name value)
     if(NOT ${ARGC} EQUAL 2 AND NOT ${ARGC} EQUAL 3)
         message(
             FATAL_ERROR
-            "Invalid arguments to set_definition(<name> <value> [PARENT_SCOPE]): (${name} ${value} ${ARGN})"
+            "Invalid arguments to set_definition_string(<name> <value> [PARENT_SCOPE]): (${name} ${value} ${ARGN})"
         )
     elseif(${ARGC} EQUAL 3 AND NOT ${ARG2} EQUAL PARENT_SCOPE)
         message(
             FATAL_ERROR
-            "Invalid arguments to set_definition(<name> <value> [PARENT_SCOPE]): (${name} ${value} ${ARGN})"
+            "Invalid arguments to set_definition_string(<name> <value> [PARENT_SCOPE]): (${name} ${value} ${ARGN})"
         )
     endif()
 
@@ -45,19 +45,19 @@ macro(set_definition name value)
 
     set(${name} ${value} ${ARGN})
     set(${name} ${value})
-    add_compile_definitions(${name}=${value})
+    add_compile_definitions(${name}="${value}")
     message(STATUS "${name} = ${value}")
 endmacro()
 
 #[[
-set_definition() only if value is defined as something other than ""
+set_definition_string() only if value is defined as something other than ""
 
 <name> : CMake variable and compile definition name to set
 <value> : the value to set name to
 [PARENT_SCOPE] : call set() with PARENT_SCOPE
 #]]
-macro(if_set_definition name value)
+macro(if_set_definition_string name value)
     if(NOT "" STREQUAL "${value}")
-        set_definition(${name} ${value} ${ARGN})
+        set_definition_string(${name} ${value} ${ARGN})
     endif()
 endmacro()

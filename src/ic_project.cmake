@@ -86,12 +86,12 @@ function(ic_project
         endif()
     endforeach()
 
-    set_definition("${out_client_name}" ${_CLIENT_NAME} PARENT_SCOPE)
-    set_definition("${out_project_name}" ${_PROJECT_NAME} PARENT_SCOPE)
-    set_definition("${out_board_name}" "${_BOARD_NAME}" PARENT_SCOPE)
-    if_set_definition("${out_board_rev}" "${_BOARD_REV}" PARENT_SCOPE)
-    if_set_definition("${out_fw_version}" "${_FW_VERSION}" PARENT_SCOPE)
-    if_set_definition("${out_build_type}" "${_BUILD_TYPE}" PARENT_SCOPE)
+    set_definition_string("${out_client_name}" ${_CLIENT_NAME} PARENT_SCOPE)
+    set_definition_string("${out_project_name}" ${_PROJECT_NAME} PARENT_SCOPE)
+    set_definition_string("${out_board_name}" "${_BOARD_NAME}" PARENT_SCOPE)
+    if_set_definition_string("${out_board_rev}" "${_BOARD_REV}" PARENT_SCOPE)
+    if_set_definition_string("${out_fw_version}" "${_FW_VERSION}" PARENT_SCOPE)
+    if_set_definition_string("${out_build_type}" "${_BUILD_TYPE}" PARENT_SCOPE)
 
     # Warn about git tag
     execute_process(
@@ -123,51 +123,51 @@ function(ic_project
         OUTPUT_VARIABLE git_hash
         OUTPUT_STRIP_TRAILING_WHITESPACE
     )
-    set_definition("${out_git_hash}" ${git_hash} PARENT_SCOPE)
+    set_definition_string("${out_git_hash}" ${git_hash} PARENT_SCOPE)
 
     # Set git dirty commit
     string(FIND ${git_hash} + res)
     if(res EQUAL -1)
-        set_definition("${out_git_dirty}" 0 PARENT_SCOPE)
+        set_definition_string("${out_git_dirty}" 0 PARENT_SCOPE)
     else()
-        set_definition("${out_git_dirty}" 1 PARENT_SCOPE)
+        set_definition_string("${out_git_dirty}" 1 PARENT_SCOPE)
     endif()
     
     if(${has_git_tag})
         # Set the git tag
         string(REPLACE "-" ";" fw_version_list ${git_tag})
         list(GET fw_version_list 0 git_label)
-        set_definition("${out_git_tag}" ${git_label} PARENT_SCOPE)
+        set_definition_string("${out_git_tag}" ${git_label} PARENT_SCOPE)
 
         # Set the git tag revision
         list(LENGTH fw_version_list len)
         if (len EQUAL 3)
             list(GET fw_version_list 1 git_tag_rev)
-            set_definition("${out_git_tag_rev}" ${git_tag_rev} PARENT_SCOPE)
+            set_definition_string("${out_git_tag_rev}" ${git_tag_rev} PARENT_SCOPE)
         else()
-            set_definition("${out_git_tag_rev}" "" PARENT_SCOPE)
+            set_definition_string("${out_git_tag_rev}" "" PARENT_SCOPE)
         endif()
     else()
-        set_definition("${out_git_tag}" "" PARENT_SCOPE)
-        set_definition("${out_git_tag_rev}" "" PARENT_SCOPE)
+        set_definition_string("${out_git_tag}" "" PARENT_SCOPE)
+        set_definition_string("${out_git_tag_rev}" "" PARENT_SCOPE)
     endif()
 
     if(NOT DEFINED ${out_fw_version})
         if(${has_git_tag})
             if(NOT "${git_tag_rev}" STREQUAL "")
-                set_definition("${out_fw_version}" "${git_label}-${git_tag_rev}" PARENT_SCOPE)
+                set_definition_string("${out_fw_version}" "${git_label}-${git_tag_rev}" PARENT_SCOPE)
             else()
-                set_definition("${out_fw_version}" "${git_label}" PARENT_SCOPE)
+                set_definition_string("${out_fw_version}" "${git_label}" PARENT_SCOPE)
             endif()
         else()
-            set_definition("${out_fw_version}" ${git_hash} PARENT_SCOPE)
+            set_definition_string("${out_fw_version}" ${git_hash} PARENT_SCOPE)
         endif()
     endif()
 
     string(TIMESTAMP build_date "%Y%m%d")
-    set_definition("${out_build_date}" ${build_date} PARENT_SCOPE)
+    set_definition_string("${out_build_date}" ${build_date} PARENT_SCOPE)
     string(TIMESTAMP timestamp)
-    set_definition("${out_build_time}" ${timestamp} PARENT_SCOPE)
+    set_definition_string("${out_build_time}" ${timestamp} PARENT_SCOPE)
 
     # Set user info
     execute_process(
@@ -175,20 +175,20 @@ function(ic_project
         OUTPUT_VARIABLE user_name
         OUTPUT_STRIP_TRAILING_WHITESPACE
     )
-    set_definition("${out_git_user_name}" ${user_name} PARENT_SCOPE)
+    set_definition_string("${out_git_user_name}" ${user_name} PARENT_SCOPE)
     execute_process(
         COMMAND git config user.email 
         OUTPUT_VARIABLE user_email
         OUTPUT_STRIP_TRAILING_WHITESPACE
     )
-    set_definition("${out_git_user_email}" ${user_email} PARENT_SCOPE)
+    set_definition_string("${out_git_user_email}" ${user_email} PARENT_SCOPE)
 
     # Set build environment info
-    set_definition("${out_c_compiler_id}" ${CMAKE_C_COMPILER_ID} PARENT_SCOPE)
-    set_definition("${out_c_compiler}" ${CMAKE_C_COMPILER} PARENT_SCOPE)
-    set_definition("${out_c_compiler_version}" ${CMAKE_C_COMPILER_VERSION} PARENT_SCOPE)
-    set_definition("${out_host_system_name}" ${CMAKE_HOST_SYSTEM} PARENT_SCOPE)
-    set_definition("${out_host_system_version}" ${CMAKE_HOST_SYSTEM_VERSION} PARENT_SCOPE)
+    set_definition_string("${out_c_compiler_id}" ${CMAKE_C_COMPILER_ID} PARENT_SCOPE)
+    set_definition_string("${out_c_compiler}" ${CMAKE_C_COMPILER} PARENT_SCOPE)
+    set_definition_string("${out_c_compiler_version}" ${CMAKE_C_COMPILER_VERSION} PARENT_SCOPE)
+    set_definition_string("${out_host_system_name}" ${CMAKE_HOST_SYSTEM} PARENT_SCOPE)
+    set_definition_string("${out_host_system_version}" ${CMAKE_HOST_SYSTEM_VERSION} PARENT_SCOPE)
 
     if(NOT "" STREQUAL "${_BOARD_REV}")
         set(board_rev_string @${_BOARD_REV})
@@ -204,7 +204,7 @@ function(ic_project
         "${_CLIENT_NAME}_${_PROJECT_NAME}_${_BOARD_NAME}${board_rev_string}_${${out_fw_version}}_${git_hash}_${build_date}${build_type_string}"
     )
     string(REPLACE " " "_" config_string ${config_string})
-    set_definition("${out_full_name}" ${config_string} PARENT_SCOPE)
+    set_definition_string("${out_full_name}" ${config_string} PARENT_SCOPE)
 
 endfunction()
 
