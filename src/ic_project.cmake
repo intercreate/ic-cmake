@@ -187,7 +187,7 @@ function(ic_project
     set_definition_string("${out_c_compiler_id}" "${CMAKE_C_COMPILER_ID}" PARENT_SCOPE)
     set_definition_string("${out_c_compiler}" "${CMAKE_C_COMPILER}" PARENT_SCOPE)
     set_definition_string("${out_c_compiler_version}" "${CMAKE_C_COMPILER_VERSION}" PARENT_SCOPE)
-    set_definition_string("${out_host_system_name}" "${CMAKE_HOST_SYSTEM}" PARENT_SCOPE)
+    set_definition_string("${out_host_system_name}" "${CMAKE_HOST_SYSTEM_NAME}" PARENT_SCOPE)
     set_definition_string("${out_host_system_version}" "${CMAKE_HOST_SYSTEM_VERSION}" PARENT_SCOPE)
 
     if(NOT "" STREQUAL "${_BOARD_REV}")
