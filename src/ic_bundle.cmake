@@ -108,7 +108,7 @@ function(ic_bundle)
     
     add_custom_command(
         OUTPUT "${_FULL_NAME}.zip"
-        COMMAND ${CMAKE_COMMAND} -E tar cf "${_FULL_NAME}.zip" "${_FULL_NAME}"
+        COMMAND ${CMAKE_COMMAND} -E tar cf "${_FULL_NAME}.zip" --format=zip "${_FULL_NAME}"
         DEPENDS ${artifact_list}
     )
 
