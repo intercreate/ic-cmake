@@ -39,7 +39,7 @@ macro(set_definition_string name value)
         )
     endif()
 
-    if(DEFINED name)
+    if(DEFINED name AND NOT "${${name}}" STREQUAL "")
         message(FATAL_ERROR "${name} is already defined!")
     endif()
 
