@@ -21,6 +21,20 @@ function(_add_artifact out_artifact_list
     set(${out_artifact_list} ${${out_artifact_list}} PARENT_SCOPE)
 endfunction()
 
+function(_add_extra_file out_artifact_list
+    bundle_target bundle_dir srcfile dependency
+)
+    get_filename_component(filename "${srcfile}" NAME)
+    set(dstfile "${bundle_dir}/${filename}")
+    add_custom_command(
+        OUTPUT "${dstfile}"
+        DEPENDS "${dependency}" "${srcfile}"
+        COMMAND ${CMAKE_COMMAND} -E copy "${srcfile}" "${dstfile}"
+    )
+    list(APPEND ${out_artifact_list} "${dstfile}")
+    set(${out_artifact_list} ${${out_artifact_list}} PARENT_SCOPE)
+endfunction()
+
 #[[
 Add build targets that will create a distributable bundle of build artifacts.
 
@@ -60,21 +74,19 @@ FULL_NAME <name>
 
 ]]#
 function(ic_bundle)
-    set(required_keyword_args
+    # Single-value arguments
+    set(one_value_args
         FULL_NAME
-    )
-    set(optional_keyword_args
         PREFIX
-        EXTRA_FILES
-        EXTRA_POSTFIXES
         DEPENDS
         BUNDLE_DIR
     )
-    list(APPEND keyword_args
-        ${required_keyword_args}
-        ${optional_keyword_args}
+    # Multi-value arguments (lists)
+    set(multi_value_args
+        EXTRA_FILES
+        EXTRA_POSTFIXES
     )
-    cmake_parse_arguments(PARSE_ARGV 0 "" "" "${keyword_args}" "")
+    cmake_parse_arguments(PARSE_ARGV 0 "" "" "${one_value_args}" "${multi_value_args}")
 
     if(_UNPARSED_ARGUMENTS)
         message(FATAL_ERROR "Unparsed arguments: ${_UNPARSED_ARGUMENTS}")
@@ -99,13 +111,22 @@ function(ic_bundle)
 
     add_artifact(.elf)
     add_artifact(.bin)
-    add_artifact(.hex)
+    # add_artifact(.hex)  # ESP-IDF doesn't generate .hex by default
     add_artifact(.map)
 
     foreach(extra_postfix ${_EXTRA_POSTFIXES})
         add_artifact("${extra_postfix}")
     endforeach()
-    
+
+    foreach(extra_file ${_EXTRA_FILES})
+        _add_extra_file(artifact_list
+            bundle
+            "${_BUNDLE_DIR}"
+            "${extra_file}"
+            "${_DEPENDS}"
+        )
+    endforeach()
+
     add_custom_command(
         OUTPUT "${_FULL_NAME}.zip"
         COMMAND ${CMAKE_COMMAND} -E tar cf "${_FULL_NAME}.zip" --format=zip "${_FULL_NAME}"
