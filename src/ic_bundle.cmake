@@ -49,6 +49,8 @@ FULL_NAME <name>
 [EXTRA_FILES <file paths list>] default: [empty cmake list]
     A list of paths to extra build artifacts that should be bundled, example:
         EXTRA_FILES "${CMAKE_BINARY_DIR}/bootloader/zephyr/zephyr.hex"
+    Each file is copied as "${FULL_NAME}_<file name>", so the example above
+    would be bundled as "${FULL_NAME}_zephyr.hex".
 
 [DEPENDS <target>] default: ${PROJECT_NAME}
     The target to depend on for the bundle target.  For Zephyr projects, this
@@ -65,16 +67,20 @@ function(ic_bundle)
     )
     set(optional_keyword_args
         PREFIX
-        EXTRA_FILES
-        EXTRA_POSTFIXES
         DEPENDS
         BUNDLE_DIR
+    )
+    set(multi_value_keyword_args
+        EXTRA_FILES
+        EXTRA_POSTFIXES
     )
     list(APPEND keyword_args
         ${required_keyword_args}
         ${optional_keyword_args}
     )
-    cmake_parse_arguments(PARSE_ARGV 0 "" "" "${keyword_args}" "")
+    cmake_parse_arguments(
+        PARSE_ARGV 0 "" "" "${keyword_args}" "${multi_value_keyword_args}"
+    )
 
     if(_UNPARSED_ARGUMENTS)
         message(FATAL_ERROR "Unparsed arguments: ${_UNPARSED_ARGUMENTS}")
@@ -104,6 +110,18 @@ function(ic_bundle)
 
     foreach(extra_postfix ${_EXTRA_POSTFIXES})
         add_artifact("${extra_postfix}")
+    endforeach()
+
+    foreach(extra_file ${_EXTRA_FILES})
+        cmake_path(GET extra_file FILENAME extra_file_name)
+        _add_artifact(artifact_list
+            bundle
+            "${_BUNDLE_DIR}"
+            "${extra_file}"
+            ""
+            "${_FULL_NAME}_${extra_file_name}"
+            "${_DEPENDS}"
+        )
     endforeach()
     
     add_custom_command(

@@ -12,5 +12,6 @@ test_cmake_begin()
 
 include(test_ic_project.cmake)
 include(test_ic_bundle/minimal_args.cmake)
+include(test_ic_bundle_extra_args/extra_args.cmake)
 
 test_cmake_end()
